@@ -23,7 +23,7 @@
 #' my_species <- c("Coptodactyla meridionalis", "Torymus chrysochlorus", "Anaspis rufa")
 #' search_gnr(my_species)
 search_gnr <- function(species_list, excluded_sources = c("Open Tree of Life Reference Taxonomy", "The Paleobiology Database", "Union 4", "Wikispecies")) {
-    raw_gnr <- taxize::gnr_resolve(unique(species_list), fields = "all")
+    raw_gnr <- taxize::gnr_resolve(species_list, fields = "all")
 
     gnr_out <-
         raw_gnr %>%

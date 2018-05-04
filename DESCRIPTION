@@ -1,7 +1,7 @@
 Package: taxizehelper
 Type: Package
 Title: Convenience Functions For ROpenSci's 'taxize' Package
-Version: 0.1.0
+Version: 0.1.1
 Author: Desi Quintans
 Maintainer: Desi Quintans <science@desiquintans.com>
 Description: 'taxize' is an excellent package for working with species lists, and this 
