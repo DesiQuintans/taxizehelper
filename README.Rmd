@@ -1,0 +1,64 @@
+---
+output:
+  md_document:
+    variant: markdown_github
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+
+library(dplyr)
+library(magrittr)
+library(taxize)
+library(stringr)
+library(knitr)
+library(taxizehelper)
+```
+
+# taxizehelper: Convenience functions for the `taxize` package.
+
+## Project participants
+
+- Desi Quintans [@eco_desi](https://twitter.com/eco_desi)
+
+Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+
+## What is `taxizehelper`?
+
+`taxizehelper` is a personal package that helps me use rOpenSci's [`taxize`](https://ropensci.org/tutorials/taxize_tutorial/) package more succinctly. `taxize` helps you retrieve up-to-date taxonomic information, so you can easily do things like:
+
+1. Ensure that you're referring to species by their current names.
+2. Error-check and repair a list of misspelled names.
+3. Retrieve taxonomic ranks (order, class, family etc.) for names.
+4. Discover the authorities who named your species.
+
+
+## Installation
+
+```{r install, echo=TRUE, eval=FALSE}
+install.packages("devtools")
+devtools::install_github("DesiQuintans/taxizehelper")
+library(taxizehelper)
+```
+
+`taxizehelper` currently has only one function:
+
+1. `search_gnr(species_list)` --- Get taxonomic info for a list of taxa in a tidy dataframe.
+
+## Ex. 1: Use `search_gnr()` to get a dataframe of taxonomic ranks
+
+```{r}
+# A list of insect species recorded within 1 km of my university.
+data("wsu_hwk_insects")
+print(wsu_hwk_insects)
+
+search_gnr(wsu_hwk_insects) %>% 
+    kable(caption = "`search_gnr()` output, a tidy dataframe of taxonomic info. The ICN ranks can be accessed using `kingdom:genus`. I intentionally kept an old name in the case of _Hadrocolletes fulvus_), and `taxize` retrieved the current genus _Leioproctus_.")
+```
