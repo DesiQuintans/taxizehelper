@@ -5,7 +5,7 @@ taxizehelper: Convenience functions for the `taxize` package.
 Project participants
 --------------------
 
--   Desi Quintans \[@eco\_desi\](<https://twitter.com/eco_desi>)
+-   Desi Quintans (<https://twitter.com/eco_desi>)
 
 Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
 
@@ -59,7 +59,7 @@ output <-
     head(5)
 ```
 
-Below is the first few rows of `search_gnr()`'s output. The ICN ranks are ordered so that you can access them with `kingdom:genus`. I intentionally kept an old name in the case of *Hadrocolletes fulvus*, and `taxize` retrieved the current genus *Leioproctus*.
+Below is the first few rows of `search_gnr()`'s output. The ICN ranks are ordered so that you can access them with `kingdom:genus`.
 
 | user\_supplied\_name    | binomial                | kingdom  | phylum     | class   | order       | family    | genus      | superkingdom | superclass | subclass  | infraclass | cohort       | suborder        | infraorder   | superfamily | subfamily    | tribe        | subtribe | subgenus | path                                                                                                                                                                                                                                                                                                          | ranks                                                                                                                                                         |
 |:------------------------|:------------------------|:---------|:-----------|:--------|:------------|:----------|:-----------|:-------------|:-----------|:----------|:-----------|:-------------|:----------------|:-------------|:------------|:-------------|:-------------|:---------|:---------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------|
