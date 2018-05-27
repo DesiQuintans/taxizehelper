@@ -23,7 +23,14 @@
 #' my_species <- c("Coptodactyla meridionalis", "Torymus chrysochlorus", "Anaspis rufa")
 #' search_gnr(my_species)
 search_gnr <- function(species_list, excluded_sources = c("Open Tree of Life Reference Taxonomy", "The Paleobiology Database", "Union 4", "Wikispecies")) {
-    raw_gnr <- taxize::gnr_resolve(species_list, fields = "all")
+    # Sometimes you want to copy a list of names from a spreadsheet, look up their info,
+    # and then paste the info back into the spreadsheet. This means that you will be
+    # providing a list that has duplicates inside it. I keep a copy of the original list
+    # so that I can merge the results back into it and return a dataframe with the same
+    # number of rows as there were entries.
+    orig_list <- dplyr::data_frame(user_supplied_name = species_list)
+
+    raw_gnr <- taxize::gnr_resolve(unique(species_list), fields = "all")
 
     gnr_out <-
         raw_gnr %>%
@@ -32,7 +39,7 @@ search_gnr <- function(species_list, excluded_sources = c("Open Tree of Life Ref
                ranks = classification_path_ranks) %>%
         dplyr::filter(!stringr::str_detect(ranks, "(no|above|unranked|(\\|\\|{8,})|^$)")) %>%  # Safety screening of ranks.
         # path and ranks are enclosed with pipes for downstream regex.
-        dplyr::mutate_at(dplyr::vars(path, ranks), str_replace, "^\\|?(.*?)\\|?$", "|\\1|") %>%
+        dplyr::mutate_at(dplyr::vars(path, ranks), stringr::str_replace, "^\\|?(.*?)\\|?$", "|\\1|") %>%
         dplyr::arrange(binomial, dplyr::desc(stringr::str_count(ranks, "\\|"))) %>%  # More pipes = more information.
         dplyr::distinct(binomial, .keep_all = TRUE) %>%
         dplyr::mutate(superkingdom = get_level(ranks, path, "superkingdom"),
@@ -57,7 +64,10 @@ search_gnr <- function(species_list, excluded_sources = c("Open Tree of Life Ref
         dplyr::select(user_supplied_name, binomial, kingdom, phylum, class, order, family,
                genus, dplyr::everything(), -path, -ranks, path, ranks)
 
-    return(gnr_out)
+    rejoined <-
+        dplyr::left_join(orig_list, gnr_out, by = "user_supplied_name")
+
+    return(rejoined)
 }
 
 
