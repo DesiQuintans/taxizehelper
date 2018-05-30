@@ -59,11 +59,11 @@ library(taxizehelper)
 data("wsu_hwk_insects")
 print(wsu_hwk_insects)
 
-output <- 
-    search_gnr(wsu_hwk_insects) %>% 
-    head(5)
+output <- search_gnr(wsu_hwk_insects) 
+
+class(output) 
+
+glimpse(output, width = 85)
 ```
 
-Below is the first few rows of `search_gnr()`'s output. The ICN ranks are ordered so that you can access them with `kingdom:genus`.
-
-`r kable(output)`
+The ICN ranks are ordered so that you can access them with `kingdom:genus`.
