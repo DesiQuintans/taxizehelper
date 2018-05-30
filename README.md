@@ -2,13 +2,6 @@
 taxizehelper: Convenience functions for the `taxize` package.
 =============================================================
 
-Project participants
---------------------
-
--   Desi Quintans (<https://twitter.com/eco_desi>)
-
-Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
-
 What is `taxizehelper`?
 -----------------------
 
@@ -18,6 +11,13 @@ What is `taxizehelper`?
 2.  Error-check and repair a list of misspelled names.
 3.  Retrieve taxonomic ranks (order, class, family etc.) for names.
 4.  Discover the authorities who named your species.
+
+Project participants
+--------------------
+
+-   Desi Quintans (<https://twitter.com/eco_desi>)
+
+Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
 
 Installation
 ------------
@@ -54,17 +54,37 @@ print(wsu_hwk_insects)
 #> [25] "Diamesus osculans"       "Ptomaphila lacrymosa"   
 #> [27] "Tenodera australasiae"   "Hippodamia variegata"
 
-output <- 
-    search_gnr(wsu_hwk_insects) %>% 
-    head(5)
+output <- search_gnr(wsu_hwk_insects) 
+#> Warning: package 'bindrcpp' was built under R version 3.4.4
+
+class(output) 
+#> [1] "tbl_df"     "tbl"        "data.frame"
+
+glimpse(output, width = 85)
+#> Observations: 28
+#> Variables: 22
+#> $ user_supplied_name <chr> "Apis mellifera", "Heteronympha merope", "Yoyetta cel...
+#> $ binomial           <chr> "Apis mellifera", "Heteronympha merope", "Yoyetta cel...
+#> $ kingdom            <chr> "Metazoa", "Metazoa", "Metazoa", "Metazoa", "Metazoa"...
+#> $ phylum             <chr> "Arthropoda", "Arthropoda", "Arthropoda", "Arthropoda...
+#> $ class              <chr> "Insecta", "Insecta", "Insecta", "Insecta", "Insecta"...
+#> $ order              <chr> "Hymenoptera", "Lepidoptera", "Hemiptera", "Hymenopte...
+#> $ family             <chr> "Apidae", "Nymphalidae", "Cicadidae", "Vespidae", "Ci...
+#> $ genus              <chr> "Apis", "Heteronympha", "Yoyetta", "Vespula", "Atraps...
+#> $ superkingdom       <chr> "Eukaryota", "Eukaryota", "Eukaryota", "Eukaryota", "...
+#> $ superclass         <chr> "Hexapoda", "Hexapoda", "Hexapoda", "Hexapoda", "Hexa...
+#> $ subclass           <chr> "Pterygota", "Pterygota", "Pterygota", "Pterygota", "...
+#> $ infraclass         <chr> "Neoptera", "Neoptera", "Neoptera", "Neoptera", "Neop...
+#> $ cohort             <chr> "Holometabola", "Holometabola", "Paraneoptera", "Holo...
+#> $ suborder           <chr> "Apocrita", "Glossata", "Auchenorrhyncha", "Apocrita"...
+#> $ infraorder         <chr> "Aculeata", "Neolepidoptera", "Cicadomorpha", "Aculea...
+#> $ superfamily        <chr> "Apoidea", "Papilionoidea", "Cicadoidea", "Vespoidea"...
+#> $ subfamily          <chr> "Apinae", "Satyrinae", "Cicadettinae", "Vespinae", "C...
+#> $ tribe              <chr> "Apini", "Satyrini", "Cicadettini", "", "Cicadettini"...
+#> $ subtribe           <chr> "", "Hypocystina", "", "", "", "", "", "", "", "", ""...
+#> $ subgenus           <chr> "", "", "", "", "", "", "", "", "", "", "", "Anosia",...
+#> $ path               <chr> "|Eukaryota|Opisthokonta|Metazoa|Eumetazoa|Bilateria|...
+#> $ ranks              <chr> "|superkingdom||kingdom||||||phylum|||superclass|clas...
 ```
 
-Below is the first few rows of `search_gnr()`'s output. The ICN ranks are ordered so that you can access them with `kingdom:genus`.
-
-| user\_supplied\_name    | binomial                | kingdom  | phylum     | class   | order       | family    | genus      | superkingdom | superclass | subclass  | infraclass | cohort       | suborder        | infraorder   | superfamily | subfamily    | tribe        | subtribe | subgenus | path                                                                                                                                                                                                                                                                                                          | ranks                                                                                                                                                         |
-|:------------------------|:------------------------|:---------|:-----------|:--------|:------------|:----------|:-----------|:-------------|:-----------|:----------|:-----------|:-------------|:----------------|:-------------|:------------|:-------------|:-------------|:---------|:---------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Aleeta curvicosta       | Aleeta curvicosta       | Metazoa  | Arthropoda | Insecta | Hemiptera   | Cicadidae | Aleeta     | Eukaryota    | Hexapoda   | Pterygota | Neoptera   | Paraneoptera | Auchenorrhyncha | Cicadomorpha | Cicadoidea  | Cicadettinae | Taphurini    |          |          | |Eukaryota|Opisthokonta|Metazoa|Eumetazoa|Bilateria|Protostomia|Ecdysozoa|Panarthropoda|Arthropoda|Mandibulata|Pancrustacea|Hexapoda|Insecta|Dicondylia|Pterygota|Neoptera|Paraneoptera|Hemiptera|Auchenorrhyncha|Cicadomorpha|Cicadoidea|Cicadidae|Cicadettinae|Taphurini|Aleeta|Aleeta curvicosta|          | |superkingdom||kingdom||||||phylum|||superclass|class||subclass|infraclass|cohort|order|suborder|infraorder|superfamily|family|subfamily|tribe|genus|species| |
-| Apis mellifera          | Apis mellifera          | Metazoa  | Arthropoda | Insecta | Hymenoptera | Apidae    | Apis       | Eukaryota    | Hexapoda   | Pterygota | Neoptera   | Holometabola | Apocrita        | Aculeata     | Apoidea     | Apinae       | Apini        |          |          | |Eukaryota|Opisthokonta|Metazoa|Eumetazoa|Bilateria|Protostomia|Ecdysozoa|Panarthropoda|Arthropoda|Mandibulata|Pancrustacea|Hexapoda|Insecta|Dicondylia|Pterygota|Neoptera|Holometabola|Hymenoptera|Apocrita|Aculeata|Apoidea|Apidae|Apinae|Apini|Apis|Apis mellifera|                                        | |superkingdom||kingdom||||||phylum|||superclass|class||subclass|infraclass|cohort|order|suborder|infraorder|superfamily|family|subfamily|tribe|genus|species| |
-| Atrapsalta corticina    | Atrapsalta corticina    | Metazoa  | Arthropoda | Insecta | Hemiptera   | Cicadidae | Atrapsalta | Eukaryota    | Hexapoda   | Pterygota | Neoptera   | Paraneoptera | Auchenorrhyncha | Cicadomorpha | Cicadoidea  | Cicadettinae | Cicadettini  |          |          | |Eukaryota|Opisthokonta|Metazoa|Eumetazoa|Bilateria|Protostomia|Ecdysozoa|Panarthropoda|Arthropoda|Mandibulata|Pancrustacea|Hexapoda|Insecta|Dicondylia|Pterygota|Neoptera|Paraneoptera|Hemiptera|Auchenorrhyncha|Cicadomorpha|Cicadoidea|Cicadidae|Cicadettinae|Cicadettini|Atrapsalta|Atrapsalta corticina| | |superkingdom||kingdom||||||phylum|||superclass|class||subclass|infraclass|cohort|order|suborder|infraorder|superfamily|family|subfamily|tribe|genus|species| |
-| Cyclochila australasiae | Cyclochila australasiae | Animalia | Arthropoda | Insecta | Hemiptera   | Cicadidae | Cyclochila |              |            |           |            |              |                 |              | Cicadoidea  |              |              |          |          | |Animalia|Arthropoda|Insecta|Hemiptera|Cicadoidea|Cicadidae|Cyclochila|Cyclochila australasiae|                                                                                                                                                                                                               | |kingdom|phylum|class|order|superfamily|family|genus|species|                                                                                                 |
-| Cystosoma saundersii    | Cystosoma saundersii    | Metazoa  | Arthropoda | Insecta | Hemiptera   | Cicadidae | Cystosoma  | Eukaryota    | Hexapoda   | Pterygota | Neoptera   | Paraneoptera | Auchenorrhyncha | Cicadomorpha | Cicadoidea  | Tibicininae  | Hemidictyini |          |          | |Eukaryota|Opisthokonta|Metazoa|Eumetazoa|Bilateria|Protostomia|Ecdysozoa|Panarthropoda|Arthropoda|Mandibulata|Pancrustacea|Hexapoda|Insecta|Dicondylia|Pterygota|Neoptera|Paraneoptera|Hemiptera|Auchenorrhyncha|Cicadomorpha|Cicadoidea|Cicadidae|Tibicininae|Hemidictyini|Cystosoma|Cystosoma saundersii|  | |superkingdom||kingdom||||||phylum|||superclass|class||subclass|infraclass|cohort|order|suborder|infraorder|superfamily|family|subfamily|tribe|genus|species| |
+The ICN ranks are ordered so that you can access them with `kingdom:genus`.
