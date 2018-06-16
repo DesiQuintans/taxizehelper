@@ -1,15 +1,16 @@
 Package: taxizehelper
 Type: Package
 Title: Convenience Functions For ROpenSci's 'taxize' Package
-Version: 0.2.0
+Version: 0.3.0
 Author: Desi Quintans
 Maintainer: Desi Quintans <science@desiquintans.com>
 Description: 'taxize' is an excellent package for working with species lists, and this 
     package contains some convenience functions that I've developed to pre-process 
     taxize's output for easy use.
-License: MIT
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+Depends: R (>= 3.4.0)
 Imports:
     taxize (>= 0.9.2),
     stringr (>= 1.3.0),
