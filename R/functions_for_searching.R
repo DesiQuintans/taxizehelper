@@ -23,11 +23,10 @@
 #' my_species <- c("Coptodactyla meridionalis", "Torymus chrysochlorus", "Anaspis rufa")
 #' search_gnr(my_species)
 search_gnr <- function(species_list, excluded_sources = c("Open Tree of Life Reference Taxonomy", "The Paleobiology Database", "Union 4", "Wikispecies")) {
-    # Sometimes you want to copy a list of names from a spreadsheet, look up their info,
-    # and then paste the info back into the spreadsheet. This means that you will be
-    # providing a list that has duplicates inside it. I keep a copy of the original list
-    # so that I can merge the results back into it and return a dataframe with the same
-    # number of rows as there were entries.
+    # I make a copy of the input because sometimes you want to copy a list of names from a
+    # spreadsheet, look up their info, and then paste the info back into the spreadsheet.
+    # I keep a copy of the original list, search only for the unique names to save time,
+    # and then join the results back to the original input and return it.
     orig_list <- dplyr::data_frame(user_supplied_name = species_list)
 
     raw_gnr <- taxize::gnr_resolve(unique(species_list), fields = "all")
@@ -90,18 +89,31 @@ search_gnr <- function(species_list, excluded_sources = c("Open Tree of Life Ref
 # my_path  <- "|Animalia|Arthropoda|Insecta|Coleoptera|Melandryidae|Abdera"
 # get_level(my_ranks, my_path, level = "class")
 get_level <- function(ranks, path, level, fill = "") {
+    # Make sure the path and ranks strings are wrapped in pipes for downstream regex.
     l_ranks <- stringr::str_to_lower(stringr::str_replace(ranks, "^\\|?(.*?)\\|?$", "|\\1|"))
     l_path <- stringr::str_replace(path, "^\\|?(.*?)\\|?$", "|\\1|")
 
+    # Construct a pattern that looks for how many ranks are before the desired 'level'.
     ranks_needle <- stringr::regex(paste0("\\|", level, ".*?$"), ignore_case = TRUE)
     truncated_ranks <- stringr::str_extract(l_ranks, ranks_needle)
-    trailing_groups <- stringr::str_count(truncated_ranks, "[\\w\\s]*\\|") - 2
-    # The number of groups that are to the right of `level`. -1 for the initial pipe
-    # and -1 for the target group.
-    trailing_groups <- ifelse(is.na(trailing_groups), 0, trailing_groups)
-    # NAs stop the regex.
 
-    results_needle <- paste0("([\\s\\w]*)(?:\\|([\\s\\w]*\\|){", trailing_groups, "})$")
+    # Count the number of ranks that come before 'level'. -1 for the initial pipe
+    # and -1 again for the target group.
+    trailing_groups <- stringr::str_count(truncated_ranks, "[\\w\\s]*\\|") - 2
+    trailing_groups <- ifelse(is.na(trailing_groups), 0, trailing_groups)  # NAs would make regex throw an error.
+
+    # Pattern for ICN-accepted epithets.
+    #     - ICN allows hyphens in some cases (e.g. Athyrium austro-occidentale Ching (1986))
+    #     - ICN does not allow diacritics or apostrophes.
+    #     - I allow full-stops so that users can have "var." or "subsp." in species names.
+    #     - I allow brackets in case of dirty input. I leave data preparation to the end-user.
+    epithet <- "[\\s\\w-\\.\\)\\(]*"
+
+    # Construct a pattern to retrieve the desired level. Capture group 1 is the name for
+    # 'level'. The non-capturing group is the number of unwanted levels that was worked
+    # out in `trailing_groups`.
+    results_needle <- paste0("(", epithet, ")(?:\\|(", epithet, "\\|){", trailing_groups, "})$")
+
     results <- stringr::str_match(l_path, results_needle)[,2]  # 2 is the column of interest.
     results <- ifelse(stringr::str_length(results) == 0, fill, results)
 
