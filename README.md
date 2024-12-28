@@ -1,3 +1,10 @@
+# Deprecated
+
+Hi, `taxizehelper` is deprecated as of 2024-12-28 because it has been 6 years since I used it or updated it.
+
+
+-------------------------------------
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 taxizehelper: Convenience functions for the `taxize` package.
 =============================================================
